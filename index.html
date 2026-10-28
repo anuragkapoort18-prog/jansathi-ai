@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanSathi AI - Government Scheme Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #075e54, #0f766e);
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            font-size: 15px;
+        }
+
+        nav {
+            background: white;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px #00000012;
+        }
+
+        nav a {
+            color: #075e54;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 12px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .welcome, .chat-box, .schemes {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px #0000000d;
+        }
+
+        h2 {
+            color: #075e54;
+            margin-top: 0;
+        }
+
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .quick-questions button {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 20px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .quick-questions button:hover {
+            background: #d1fae5;
+        }
+
+        #chatMessages {
+            min-height: 180px;
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #f8fafc;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            margin: 8px 0;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .user {
+            background: #dbeafe;
+            margin-left: 25px;
+        }
+
+        .bot {
+            background: #dcfce7;
+            margin-right: 25px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #userInput {
+            flex: 1;
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        #sendBtn {
+            background: #087f5b;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #sendBtn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .scheme-card {
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 10px;
+        }
+
+        .scheme-card h3 {
+            margin-top: 0;
+            color: #0f766e;
+        }
+
+        .scheme-card a {
+            color: #0369a1;
+            font-weight: bold;
+        }
+
+        #status {
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            text-align: center;
+            background: #0f172a;
+            color: white;
+            padding: 18px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 500px) {
+            header h1 {
+                font-size: 25px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 6px;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            #sendBtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🇮🇳 JanSathi AI</h1>
+    <p>आपका सरकारी योजनाओं का स्मार्ट सहायक</p>
+    <p>सही योजना खोजें • पात्रता समझें • आधिकारिक जानकारी पाएँ</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#assistant">AI Assistant</a>
+    <a href="#schemes">Government Schemes</a>
+</nav>
+
+<main class="container">
+
+    <section class="welcome" id="home">
+        <h2>नमस्ते! JanSathi AI में आपका स्वागत है।</h2>
+        <p>
+            सरकारी योजनाओं, पात्रता, लाभ और आवेदन प्रक्रिया के बारे में
+            हिंदी या अंग्रेजी में अपना सवाल पूछें।
+        </p>
+        <p><strong>उदाहरण:</strong> प्रधानमंत्री किसान योजना का लाभ कैसे मिलेगा?</p>
+    </section>
+
+    <section class="chat-box" id="assistant">
+        <h2>🤖 JanSathi AI Chatbot</h2>
+
+        <div class="quick-questions">
+            <button type="button"
+                onclick="askQuestion('PM Kisan Yojana kya hai?')">
+                PM Kisan Yojana
+            </button>
+
+            <button type="button"
+                onclick="askQuestion('Ayushman Bharat Yojana ke baare mein batao')">
+                Ayushman Bharat
+            </button>
+
+            <button type="button"
+                onclick="askQuestion('Sarkari yojana ke liye apply kaise karein?')">
+                आवेदन कैसे करें?
+            </button>
+        </div>
+
+        <div id="chatMessages" aria-live="polite">
+            <div class="message bot">
+                <strong>JanSathi AI:</strong>
+                नमस्ते! मैं आपकी सरकारी योजनाओं की जानकारी खोजने में मदद करूँगा।
+                अपना सवाल नीचे लिखें।
+            </div>
+        </div>
+
+        <form class="input-area" id="chatForm">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="अपना सवाल यहाँ लिखें..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit" id="sendBtn">Send ➤</button>
+        </form>
+
+        <p id="status" aria-live="polite"></p>
+    </section>
+
+    <section class="schemes" id="schemes">
+        <h2>📋 प्रमुख सरकारी योजनाएँ</h2>
+
+        <div class="scheme-card">
+            <h3>1. PM Kisan Samman Nidhi</h3>
+            <p>पात्र किसान परिवारों के लिए आर्थिक सहायता योजना।</p>
+            <a href="https://pmkisan.gov.in/"
+               target="_blank" rel="noopener noreferrer">
+                आधिकारिक वेबसाइट खोलें
+            </a>
+        </div>
+
+        <div class="scheme-card">
+            <h3>2. Ayushman Bharat PM-JAY</h3>
+            <p>पात्र लाभार्थियों के लिए स्वास्थ्य सुरक्षा योजना।</p>
+            <a href="https://pmjay.gov.in/"
+               target="_blank" rel="noopener noreferrer">
+                आधिकारिक वेबसाइट खोलें
+            </a>
+        </div>
+
+        <div class="scheme-card">
+            <h3>3. National Scholarship Portal</h3>
+            <p>पात्र विद्यार्थियों के लिए विभिन्न छात्रवृत्ति योजनाओं की जानकारी।</p>
+            <a href="https://scholarships.gov.in/"
+               target="_blank" rel="noopener noreferrer">
+                आधिकारिक वेबसाइट खोलें
+            </a>
+        </div>
+
+        <div class="scheme-card">
+            <h3>4. MGNREGA</h3>
+            <p>ग्रामीण परिवारों के लिए रोजगार गारंटी कार्यक्रम की जानकारी।</p>
+            <a href="https://nrega.nic.in/"
+               target="_blank" rel="noopener noreferrer">
+                आधिकारिक वेबसाइट खोलें
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 JanSathi AI | Government Scheme Information Assistant</p>
+    <p>योजना की पात्रता और आवेदन की शर्तें आधिकारिक वेबसाइट पर जाँचें।</p>
+</footer>
+
+<script>
+    // FastAPI backend address
+    const API_URL = "http://127.0.0.1:8001/chat";
+
+    const chatForm = document.getElementById("chatForm");
+    const userInput = document.getElementById("userInput");
+    const chatMessages = document.getElementById("chatMessages");
+    const sendBtn = document.getElementById("sendBtn");
+    const statusText = document.getElementById("status");
+
+    function addMessage(sender, message, className) {
+        const div = document.createElement("div");
+        div.className = "message " + className;
+
+        const strong = document.createElement("strong");
+        strong.textContent = sender + ": ";
+
+        const text = document.createElement("span");
+        text.textContent = message;
+
+        div.appendChild(strong);
+        div.appendChild(text);
+        chatMessages.appendChild(div);
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function askQuestion(question) {
+        userInput.value = question;
+        userInput.focus();
+    }
+
+    chatForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const question = userInput.value.trim();
+
+        if (!question || sendBtn.disabled) {
+            return;
+        }
+
+        addMessage("आप", question, "user");
+
+        userInput.value = "";
+        sendBtn.disabled = true;
+        statusText.textContent = "JanSathi AI जवाब तैयार कर रहा है...";
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    question: question
+                })
+            });
+
+            const rawText = await response.text();
+            let data;
+
+            try {
+                data = JSON.parse(rawText);
+            } catch {
+                data = rawText;
+            }
+
+            if (!response.ok) {
+                let errorMessage = "HTTP " + response.status;
+
+                if (typeof data === "string" && data) {
+                    errorMessage += ": " + data;
+                } else if (data && data.detail) {
+                    errorMessage += ": " +
+                        (typeof data.detail === "string"
+                            ? data.detail
+                            : JSON.stringify(data.detail));
+                }
+
+                throw new Error(errorMessage);
+            }
+
+            let answer;
+
+            if (typeof data === "string") {
+                answer = data;
+            } else if (data && typeof data === "object") {
+                answer =
+                    data.answer ??
+                    data.response ??
+                    data.reply ??
+                    data.message ??
+                    data.result ??
+                    data.detail;
+            }
+
+            if (answer === undefined || answer === null || answer === "") {
+                answer = "Backend से जवाब मिला, लेकिन जवाब का प्रारूप समझ नहीं आया।";
+            }
+
+            addMessage("JanSathi AI", String(answer), "bot");
+            statusText.textContent = "";
+
+        } catch (error) {
+            console.error("JanSathi AI error:", error);
+
+            let message =
+                "Backend से कनेक्शन नहीं हो पाया। ";
+
+            if (error instanceof TypeError) {
+                message +=
+                    "जाँचें कि FastAPI चालू है और index.html को सही तरीके से खोल रहे हैं।";
+            } else {
+                message += error.message;
+            }
+
+            addMessage("JanSathi AI", message, "bot");
+            statusText.textContent = "कनेक्शन या API में समस्या आई।";
+        } finally {
+            sendBtn.disabled = false;
+            userInput.focus();
+        }
+    });
+</script>
+
+</body>
+</html>
